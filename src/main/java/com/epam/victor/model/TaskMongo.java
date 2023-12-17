@@ -1,12 +1,12 @@
 package com.epam.victor.model;
 
+import com.epam.victor.model.currency.CurrencyPair;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "tasks")
@@ -24,25 +24,13 @@ public class TaskMongo {
     private String category;
 
     private Instant dateOfCreation;
-    //todo Change to Instant
+
     private Instant deadline;
+
+    private CurrencyPair currencyPair;
 
     private List<SubTaskMongo> subTasks;
 
-    //todo add currency Base
-    // no annotation
 
-    public TaskMongo(String name,
-                     String description,
-                     String category,
-                     Instant dateOfCreation,
-                     Instant deadline,
-                     List<SubTaskMongo> subTasks) {
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.dateOfCreation = dateOfCreation;
-        this.deadline = deadline;
-        this.subTasks = subTasks;
-    }
+
 }

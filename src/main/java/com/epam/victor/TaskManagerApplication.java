@@ -3,6 +3,7 @@ package com.epam.victor;
 import com.epam.victor.model.dto.SubTaskInputDto;
 import com.epam.victor.model.dto.TaskDto;
 import com.epam.victor.model.dto.TaskInputDto;
+import com.epam.victor.repository.TaskRepositoryMongo;
 import com.epam.victor.service.SubTaskService;
 import com.epam.victor.service.TaskService;
 import com.epam.victor.service.mongo.SubTaskServiceMongo;
@@ -41,7 +42,7 @@ public class TaskManagerApplication {
 	CommandLineRunner runner(TaskService taskService, SubTaskService subTaskService){
 		return args -> {
 			TaskInputDto task = new TaskInputDto();
-			task.setName("Task111111");
+			task.setName("Task with Currency Base11");
 			task.setCategory("Motivation");
 			task.setDeadline(Instant.parse("2023-12-16T00:00:00Z"));
 			task.setDescription("Try to wake up1121212");
@@ -52,6 +53,8 @@ public class TaskManagerApplication {
 					new SubTaskInputDto("Not to wake up1451","Disable alarm"));
 
 			taskService.create(task, subTasks);
+
+			//System.out.println(taskRepositoryMongo.findById("657dff10e418320de3cb2125").get().getCurrencyPair().getBase());
 			//System.out.println(subTaskService.getAllByTaskCategory("IT"));
 //			subTaskService.create(
 //					new SubTaskInputDto("Stay here", "Stay in office for work during the day"),

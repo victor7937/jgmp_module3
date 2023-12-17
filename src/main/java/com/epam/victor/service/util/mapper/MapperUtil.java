@@ -1,4 +1,4 @@
-package com.epam.victor.service.util;
+package com.epam.victor.service.util.mapper;
 
 import org.modelmapper.ModelMapper;
 

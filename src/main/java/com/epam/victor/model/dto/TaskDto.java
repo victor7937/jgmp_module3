@@ -1,6 +1,7 @@
 package com.epam.victor.model.dto;
 
 import com.epam.victor.model.SubTaskMongo;
+import com.epam.victor.model.currency.CurrencyPair;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,7 @@ public class TaskDto {
 
     private Instant deadline;
 
-    private List<SubTaskMongo> subTasks;
+    private CurrencyPair currencyPair;
+
+    private List<SubTaskDto> subTasks;
 }

@@ -1,5 +1,7 @@
 package com.epam.victor.config;
 
+import com.epam.victor.model.converter.CurrencyPairReadingConverter;
+import com.epam.victor.model.converter.CurrencyPairWritingConverter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -9,20 +11,35 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Configuration
 @Profile("mongo")
-@EnableMongoRepositories(basePackages = "com.epam.victor.repository")
-public class MongoConfig {
+public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Autowired
     private Environment env;
 
-    @Bean
-    public MongoClient mongo() {
+    @Override
+    protected String getDatabaseName() {
+        return env.getProperty("spring.data.mongodb.database");
+    }
+
+    @Override
+    protected Collection<String> getMappingBasePackages() {
+        return Collections.singleton("com.epam.victor.repository");
+    }
+
+
+    @Override
+    public MongoClient mongoClient() {
         ConnectionString connectionString = new ConnectionString(String.format(
                 "mongodb://localhost:%s/%s",
                 env.getProperty("spring.data.mongodb.host"),
@@ -33,8 +50,10 @@ public class MongoConfig {
         return MongoClients.create(mongoClientSettings);
     }
 
-    @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongo(),  env.getProperty("spring.data.mongodb.database"));
+    @Override
+    protected void configureConverters(MongoCustomConversions.MongoConverterConfigurationAdapter adapter) {
+        adapter.registerConverter(new CurrencyPairWritingConverter());
+        adapter.registerConverter(new CurrencyPairReadingConverter());
     }
+
 }

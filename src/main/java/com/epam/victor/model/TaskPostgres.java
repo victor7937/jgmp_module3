@@ -1,5 +1,7 @@
 package com.epam.victor.model;
 
+import com.epam.victor.model.converter.CurrencyPairConverter;
+import com.epam.victor.model.currency.CurrencyPair;
 import com.epam.victor.repository.SubTaskRepositoryPostgres;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,6 +35,9 @@ public class TaskPostgres {
 
     @Column(name = "deadline")
     private Instant deadline;
+
+    @Column(name="currency_pair")
+    private CurrencyPair currencyPair;
 
     @OneToMany(mappedBy = "taskPostgres", cascade = CascadeType.PERSIST)
     private List<SubTaskPostgres> subTasks = new ArrayList<>();
