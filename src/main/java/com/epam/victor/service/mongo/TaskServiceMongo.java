@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,7 +39,6 @@ public class TaskServiceMongo implements TaskService {
         subTasks.forEach(st -> st.setId(new ObjectId().toString()));
         task.setSubTasks(subTasks);
         task.setDateOfCreation(Instant.now());
-        task.setCurrencyPair(CurrencyPair.of("USD/GEL"));
         return taskMapper.fromTaskToTaskDto(taskRepositoryMongo.save(task));
     }
 
@@ -49,7 +47,7 @@ public class TaskServiceMongo implements TaskService {
     }
 
     public List<TaskDto> getAllOverdue() {
-        return taskMapper.fromTaskListToTaskDtoList(taskRepositoryMongo.findAllByDeadlineBefore(LocalDateTime.now()));
+        return taskMapper.fromTaskListToTaskDtoList(taskRepositoryMongo.findAllByDeadlineBefore(Instant.now()));
     }
 
     public List<TaskDto> findTaskByDescriptionKey(String key){

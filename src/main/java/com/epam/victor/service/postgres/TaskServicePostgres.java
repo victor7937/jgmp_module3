@@ -30,8 +30,8 @@ public class TaskServicePostgres implements TaskService {
 
     @Autowired
     public TaskServicePostgres(TaskRepositoryPostgres taskRepository,
-                               SubTaskRepositoryPostgres subTaskRepository, TaskMapper<TaskPostgres,
-                               SubTaskPostgres> taskMapper) {
+                               SubTaskRepositoryPostgres subTaskRepository,
+                               TaskMapper<TaskPostgres, SubTaskPostgres> taskMapper) {
         this.taskRepository = taskRepository;
         this.subTaskRepository = subTaskRepository;
         this.taskMapper = taskMapper;
@@ -43,7 +43,6 @@ public class TaskServicePostgres implements TaskService {
         TaskPostgres task = taskMapper.toTaskFromInputDto(inputTask);
         List<SubTaskPostgres> subTasks = taskMapper.toSubtaskListFromInputDtoList(inputSubTasks);
         task.setDateOfCreation(Instant.now());
-        task.setCurrencyPair(CurrencyPair.of("USD/GEL"));
         subTasks.forEach(task::addSubtask);
         return taskMapper.fromTaskToTaskDto(taskRepository.save(task));
     }
@@ -52,31 +51,31 @@ public class TaskServicePostgres implements TaskService {
 
     @Override
     public List<TaskDto> getAll() {
-        return null;
+        return taskMapper.fromTaskListToTaskDtoList(taskRepository.findAll());
     }
 
     @Override
     public List<TaskDto> getAllOverdue() {
-        return null;
+        return taskMapper.fromTaskListToTaskDtoList(taskRepository.findAllByDeadlineBefore(Instant.now()));
     }
 
     @Override
     public List<TaskDto> findTaskByDescriptionKey(String key) {
-        return null;
+        return taskMapper.fromTaskListToTaskDtoList(taskRepository.findAllByDescriptionContainsIgnoreCase(key));
     }
 
     @Override
     public List<TaskDto> getAllWithCategory(String category) {
-        return null;
+        return taskMapper.fromTaskListToTaskDtoList(taskRepository.findAllByCategory(category));
     }
 
     @Override
     public void deleteTask(String taskId) {
-
+        taskRepository.deleteById(Integer.parseInt(taskId));
     }
 
     @Override
     public void updateTask(TaskDto taskDto) {
-
+        taskRepository.save(taskMapper.toTaskFromDto(taskDto));
     }
 }

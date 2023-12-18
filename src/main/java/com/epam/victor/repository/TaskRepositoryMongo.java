@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Profile("mongo")
 //@RepositoryRestResource(collectionResourceRel = "tasks", path = "tasks")
 public interface TaskRepositoryMongo extends MongoRepository<TaskMongo, String> {
-    List<TaskMongo> findAllByDeadlineBefore(LocalDateTime dateTime);
+    List<TaskMongo> findAllByDeadlineBefore(Instant dateTime);
     List<TaskMongo> findAllByCategory(String category);
     List<TaskMongo> findAllByDescriptionContainsIgnoreCase(String key);
 
